@@ -1,0 +1,20 @@
+{
+  "workflowKey": "sample_extract_attribute",
+  "name": "属性取得サンプル",
+  "startUrl": "https://example.com",
+  "steps": [
+    {
+      "name": "リンクURL取得",
+      "type": "extractAttribute",
+      "selectorType": "css",
+      "selector": "a",
+      "attribute": "href",
+      "saveAs": "linkUrls"
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "extract_attribute_result.png"
+    }
+  ]
+}

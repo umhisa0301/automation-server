@@ -1,0 +1,21 @@
+{
+  "workflowKey": "sample_extract_multiple",
+  "name": "複数取得サンプル",
+
+  "startUrl": "https://www.bing.com/search?q=playwright",
+
+  "steps": [
+    {
+      "name": "検索結果タイトル取得",
+      "type": "extractText",
+      "selectorType": "css",
+      "selector": "h2",
+      "saveAs": "titles"
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "multiple_result.png"
+    }
+  ]
+}

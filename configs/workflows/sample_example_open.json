@@ -1,0 +1,24 @@
+{
+  "workflowKey": "sample_example_open",
+  "name": "Example.com表示サンプル",
+  "startUrl": "https://example.com",
+  "steps": [
+    {
+      "name": "3秒待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "タイトル取得",
+      "type": "extractText",
+      "selectorType": "css",
+      "selector": "h1",
+      "saveAs": "pageTitle"
+    },
+    {
+      "name": "スクリーンショット保存",
+      "type": "screenshot",
+      "fileName": "example_json_result.png"
+    }
+  ]
+}

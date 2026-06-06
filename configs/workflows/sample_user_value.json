@@ -1,0 +1,33 @@
+{
+  "workflowKey": "sample_user_value",
+  "name": "ユーザー値確認",
+
+  "startUrl": "https://www.bing.com",
+
+  "steps": [
+    {
+      "name": "検索ボックスへ入力",
+      "type": "input",
+      "selectorType": "css",
+      "selector": "#sb_form_q",
+      "valueFrom": "user.values.commentText"
+    },
+    {
+      "name": "Enter押下",
+      "type": "press",
+      "selectorType": "css",
+      "selector": "#sb_form_q",
+      "key": "Enter"
+    },
+    {
+      "name": "待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "user_value_result.png"
+    }
+  ]
+}

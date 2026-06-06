@@ -1,0 +1,20 @@
+{
+  "name": "automation-server",
+  "version": "1.0.0",
+  "description": "Config-driven browser automation server using Playwright",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "sample": "node src/run_sample.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "playwright": "^1.45.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

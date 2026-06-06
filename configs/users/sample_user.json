@@ -1,0 +1,9 @@
+{
+  "userKey": "sample_user",
+  "displayName": "サンプルユーザー",
+  "loginId": "sample_login",
+  "password": "sample_password",
+  "values": {
+    "commentText": "これはサンプルユーザー専用コメントです"
+  }
+}

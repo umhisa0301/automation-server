@@ -1,0 +1,21 @@
+{
+  "workflowKey": "sample_extract_title",
+  "name": "タイトル取得サンプル",
+
+  "startUrl": "https://example.com",
+
+  "steps": [
+    {
+      "name": "タイトル取得",
+      "type": "extractText",
+      "selectorType": "css",
+      "selector": "h1",
+      "saveAs": "title"
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "extract_title_result.png"
+    }
+  ]
+}

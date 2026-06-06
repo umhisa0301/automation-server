@@ -1,0 +1,23 @@
+{
+  "workflowKey": "sample_click_link",
+  "name": "クリックサンプル",
+  "startUrl": "https://example.com",
+  "steps": [
+    {
+      "name": "Learn moreをクリック",
+      "type": "click",
+      "selectorType": "css",
+      "selector": "a"
+    },
+    {
+      "name": "2秒待機",
+      "type": "wait",
+      "milliseconds": 2000
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "click_link_result.png"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "workflowKey": "sample_google_search",
+  "name": "Google検索サンプル",
+  "startUrl": "https://www.google.com",
+  "steps": [
+    {
+      "name": "検索ボックスへ入力",
+      "type": "input",
+      "selectorType": "css",
+      "selector": "textarea[name='q']",
+      "valueFrom": "runtime.keyword"
+    },
+    {
+      "name": "Enterキー押下",
+      "type": "press",
+      "selectorType": "css",
+      "selector": "textarea[name='q']",
+      "key": "Enter"
+    },
+    {
+      "name": "待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "スクリーンショット保存",
+      "type": "screenshot",
+      "fileName": "google_result.png"
+    }
+  ]
+}

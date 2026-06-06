@@ -1,0 +1,12 @@
+node_modules/
+.env
+
+storage/screenshots/
+storage/videos/
+storage/logs/
+storage/results/
+
+configs/users/*.json
+!configs/users/sample_user.json
+
+*.log
