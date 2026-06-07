@@ -6,9 +6,30 @@ const { runWorkflow } = require('./workflow_runner');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const apiKey = process.env.AUTOMATION_API_KEY;
 
 app.use(cors());
 app.use(express.json());
+
+function requireApiKey(req, res, next) {
+  if (!apiKey) {
+    return res.status(500).json({
+      success: false,
+      error: 'AUTOMATION_API_KEY が未設定です'
+    });
+  }
+
+  const requestApiKey = req.header('x-api-key');
+
+  if (!requestApiKey || requestApiKey !== apiKey) {
+    return res.status(401).json({
+      success: false,
+      error: 'APIキーが不正です'
+    });
+  }
+
+  next();
+}
 
 app.get('/', (req, res) => {
   res.json({
@@ -26,7 +47,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.post('/api/run-workflow', async (req, res) => {
+app.post('/api/run-workflow', requireApiKey, async (req, res) => {
   const { userKey, workflowKey, runtime } = req.body;
 
   if (!userKey) {
