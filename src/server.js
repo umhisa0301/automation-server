@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 const apiKey = process.env.AUTOMATION_API_KEY;
 
 const rootDir = path.join(__dirname, '..');
+const sitesDir = path.join(rootDir, 'configs', 'sites');
 const usersDir = path.join(rootDir, 'configs', 'users');
 const workflowsDir = path.join(rootDir, 'configs', 'workflows');
 const resultsDir = path.join(rootDir, 'storage', 'results');
@@ -100,6 +101,15 @@ function isSafeFileName(fileName) {
   );
 }
 
+function filterBySiteKey(items, siteKey) {
+  if (!siteKey) return items;
+
+  return items.filter((item) => {
+    if (!item.siteKey) return false;
+    return item.siteKey === siteKey;
+  });
+}
+
 app.get('/', (req, res) => {
   res.json({
     ok: true,
@@ -116,8 +126,38 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.get('/api/sites', requireApiKey, (req, res) => {
+  try {
+    const files = listJsonFiles(sitesDir);
+
+    const sites = files.map((file) => {
+      const json = safeReadJson(file.filePath);
+
+      return {
+        siteKey: json.siteKey,
+        displayName: json.displayName,
+        baseUrl: json.baseUrl,
+        description: json.description || '',
+        fileName: file.fileName,
+        modifiedAt: file.modifiedAt
+      };
+    });
+
+    res.json({
+      success: true,
+      sites
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 app.get('/api/users', requireApiKey, (req, res) => {
   try {
+    const siteKey = req.query.siteKey ? req.query.siteKey.toString() : null;
     const files = listJsonFiles(usersDir);
 
     const users = files.map((file) => {
@@ -125,6 +165,7 @@ app.get('/api/users', requireApiKey, (req, res) => {
 
       return {
         userKey: json.userKey,
+        siteKey: json.siteKey || null,
         displayName: json.displayName,
         fileName: file.fileName,
         modifiedAt: file.modifiedAt
@@ -133,7 +174,7 @@ app.get('/api/users', requireApiKey, (req, res) => {
 
     res.json({
       success: true,
-      users
+      users: filterBySiteKey(users, siteKey)
     });
   } catch (error) {
     res.status(500).json({
@@ -145,6 +186,7 @@ app.get('/api/users', requireApiKey, (req, res) => {
 
 app.get('/api/workflows', requireApiKey, (req, res) => {
   try {
+    const siteKey = req.query.siteKey ? req.query.siteKey.toString() : null;
     const files = listJsonFiles(workflowsDir);
 
     const workflows = files.map((file) => {
@@ -152,6 +194,7 @@ app.get('/api/workflows', requireApiKey, (req, res) => {
 
       return {
         workflowKey: json.workflowKey,
+        siteKey: json.siteKey || null,
         name: json.name,
         startUrl: json.startUrl,
         stepCount: Array.isArray(json.steps) ? json.steps.length : 0,
@@ -162,7 +205,7 @@ app.get('/api/workflows', requireApiKey, (req, res) => {
 
     res.json({
       success: true,
-      workflows
+      workflows: filterBySiteKey(workflows, siteKey)
     });
   } catch (error) {
     res.status(500).json({

@@ -1,9 +1,8 @@
 {
   "workflowKey": "sample_user_value",
+  "siteKey": "bing",
   "name": "ユーザー値確認",
-
   "startUrl": "https://www.bing.com",
-
   "steps": [
     {
       "name": "検索ボックスへ入力",

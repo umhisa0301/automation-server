@@ -1,5 +1,6 @@
 {
   "userKey": "sample_user",
+  "siteKey": "bing",
   "displayName": "サンプルユーザー",
   "loginId": "sample_login",
   "password": "sample_password",

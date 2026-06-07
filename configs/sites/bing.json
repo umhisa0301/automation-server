@@ -1,0 +1,6 @@
+{
+  "siteKey": "bing",
+  "displayName": "Bing",
+  "baseUrl": "https://www.bing.com",
+  "description": "検証用のBing検索サイト"
+}
