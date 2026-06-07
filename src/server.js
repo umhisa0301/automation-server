@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const { runWorkflow } = require('./workflow_runner');
@@ -7,6 +9,12 @@ const { runWorkflow } = require('./workflow_runner');
 const app = express();
 const port = process.env.PORT || 3000;
 const apiKey = process.env.AUTOMATION_API_KEY;
+
+const rootDir = path.join(__dirname, '..');
+const usersDir = path.join(rootDir, 'configs', 'users');
+const workflowsDir = path.join(rootDir, 'configs', 'workflows');
+const resultsDir = path.join(rootDir, 'storage', 'results');
+const screenshotsDir = path.join(rootDir, 'storage', 'screenshots');
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +39,67 @@ function requireApiKey(req, res, next) {
   next();
 }
 
+function safeReadJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
+function listJsonFiles(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
+
+  return fs
+    .readdirSync(dirPath)
+    .filter((fileName) => fileName.endsWith('.json'))
+    .map((fileName) => {
+      const filePath = path.join(dirPath, fileName);
+      const stat = fs.statSync(filePath);
+
+      return {
+        fileName,
+        filePath,
+        size: stat.size,
+        modifiedAt: stat.mtime.toISOString()
+      };
+    })
+    .sort((a, b) => b.modifiedAt.localeCompare(a.modifiedAt));
+}
+
+function listImageFiles(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
+
+  return fs
+    .readdirSync(dirPath)
+    .filter((fileName) => {
+      const lower = fileName.toLowerCase();
+      return (
+        lower.endsWith('.png') ||
+        lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.webp')
+      );
+    })
+    .map((fileName) => {
+      const filePath = path.join(dirPath, fileName);
+      const stat = fs.statSync(filePath);
+
+      return {
+        fileName,
+        filePath,
+        size: stat.size,
+        modifiedAt: stat.mtime.toISOString()
+      };
+    })
+    .sort((a, b) => b.modifiedAt.localeCompare(a.modifiedAt));
+}
+
+function isSafeFileName(fileName) {
+  return (
+    typeof fileName === 'string' &&
+    !fileName.includes('..') &&
+    !fileName.includes('/') &&
+    !fileName.includes('\\')
+  );
+}
+
 app.get('/', (req, res) => {
   res.json({
     ok: true,
@@ -45,6 +114,203 @@ app.get('/health', (req, res) => {
     service: 'automation-server',
     timestamp: new Date().toISOString()
   });
+});
+
+app.get('/api/users', requireApiKey, (req, res) => {
+  try {
+    const files = listJsonFiles(usersDir);
+
+    const users = files.map((file) => {
+      const json = safeReadJson(file.filePath);
+
+      return {
+        userKey: json.userKey,
+        displayName: json.displayName,
+        fileName: file.fileName,
+        modifiedAt: file.modifiedAt
+      };
+    });
+
+    res.json({
+      success: true,
+      users
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/workflows', requireApiKey, (req, res) => {
+  try {
+    const files = listJsonFiles(workflowsDir);
+
+    const workflows = files.map((file) => {
+      const json = safeReadJson(file.filePath);
+
+      return {
+        workflowKey: json.workflowKey,
+        name: json.name,
+        startUrl: json.startUrl,
+        stepCount: Array.isArray(json.steps) ? json.steps.length : 0,
+        fileName: file.fileName,
+        modifiedAt: file.modifiedAt
+      };
+    });
+
+    res.json({
+      success: true,
+      workflows
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/results', requireApiKey, (req, res) => {
+  try {
+    const files = listJsonFiles(resultsDir);
+
+    const results = files.map((file) => {
+      let summary = null;
+
+      try {
+        const json = safeReadJson(file.filePath);
+
+        summary = {
+          workflowKey: json.workflowKey,
+          userKey: json.userKey,
+          executedAt: json.executedAt,
+          outputKeys: json.outputs ? Object.keys(json.outputs) : []
+        };
+      } catch (_) {
+        summary = null;
+      }
+
+      return {
+        fileName: file.fileName,
+        size: file.size,
+        modifiedAt: file.modifiedAt,
+        summary
+      };
+    });
+
+    res.json({
+      success: true,
+      results
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/results/:fileName', requireApiKey, (req, res) => {
+  try {
+    const fileName = req.params.fileName;
+
+    if (!isSafeFileName(fileName) || !fileName.endsWith('.json')) {
+      return res.status(400).json({
+        success: false,
+        error: '不正なファイル名です'
+      });
+    }
+
+    const filePath = path.join(resultsDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: '結果ファイルが見つかりません'
+      });
+    }
+
+    const json = safeReadJson(filePath);
+
+    res.json({
+      success: true,
+      result: json
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/screenshots', requireApiKey, (req, res) => {
+  try {
+    const screenshots = listImageFiles(screenshotsDir).map((file) => {
+      return {
+        fileName: file.fileName,
+        size: file.size,
+        modifiedAt: file.modifiedAt,
+        url: `/api/screenshots/${encodeURIComponent(file.fileName)}`
+      };
+    });
+
+    res.json({
+      success: true,
+      screenshots
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/screenshots/:fileName', requireApiKey, (req, res) => {
+  try {
+    const fileName = req.params.fileName;
+
+    if (!isSafeFileName(fileName)) {
+      return res.status(400).json({
+        success: false,
+        error: '不正なファイル名です'
+      });
+    }
+
+    const lower = fileName.toLowerCase();
+
+    const isImage =
+      lower.endsWith('.png') ||
+      lower.endsWith('.jpg') ||
+      lower.endsWith('.jpeg') ||
+      lower.endsWith('.webp');
+
+    if (!isImage) {
+      return res.status(400).json({
+        success: false,
+        error: '画像ファイルのみ取得できます'
+      });
+    }
+
+    const filePath = path.join(screenshotsDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: 'スクリーンショットが見つかりません'
+      });
+    }
+
+    return res.sendFile(filePath);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 app.post('/api/run-workflow', requireApiKey, async (req, res) => {
