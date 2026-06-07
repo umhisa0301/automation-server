@@ -18,7 +18,7 @@ const resultsDir = path.join(rootDir, 'storage', 'results');
 const screenshotsDir = path.join(rootDir, 'storage', 'screenshots');
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '2mb' }));
 
 function requireApiKey(req, res, next) {
   if (!apiKey) {
@@ -42,6 +42,14 @@ function requireApiKey(req, res, next) {
 
 function safeReadJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
+function writeJson(filePath, value) {
+  fs.writeFileSync(
+    filePath,
+    JSON.stringify(value, null, 2),
+    'utf-8'
+  );
 }
 
 function listJsonFiles(dirPath) {
@@ -101,6 +109,13 @@ function isSafeFileName(fileName) {
   );
 }
 
+function isSafeKey(value) {
+  return (
+    typeof value === 'string' &&
+    /^[a-zA-Z0-9_-]+$/.test(value)
+  );
+}
+
 function filterBySiteKey(items, siteKey) {
   if (!siteKey) return items;
 
@@ -108,6 +123,44 @@ function filterBySiteKey(items, siteKey) {
     if (!item.siteKey) return false;
     return item.siteKey === siteKey;
   });
+}
+
+function validateWorkflowJson(workflow) {
+  if (!workflow || typeof workflow !== 'object') {
+    return 'Workflow JSONが不正です';
+  }
+
+  if (!isSafeKey(workflow.workflowKey)) {
+    return 'workflowKey は英数字・ハイフン・アンダースコアのみで指定してください';
+  }
+
+  if (!isSafeKey(workflow.siteKey)) {
+    return 'siteKey は英数字・ハイフン・アンダースコアのみで指定してください';
+  }
+
+  if (!workflow.name || typeof workflow.name !== 'string') {
+    return 'name は必須です';
+  }
+
+  if (!workflow.startUrl || typeof workflow.startUrl !== 'string') {
+    return 'startUrl は必須です';
+  }
+
+  if (!Array.isArray(workflow.steps)) {
+    return 'steps は配列で指定してください';
+  }
+
+  for (const [index, step] of workflow.steps.entries()) {
+    if (!step || typeof step !== 'object') {
+      return `steps[${index}] が不正です`;
+    }
+
+    if (!step.type || typeof step.type !== 'string') {
+      return `steps[${index}].type は必須です`;
+    }
+  }
+
+  return null;
 }
 
 app.get('/', (req, res) => {
@@ -206,6 +259,71 @@ app.get('/api/workflows', requireApiKey, (req, res) => {
     res.json({
       success: true,
       workflows: filterBySiteKey(workflows, siteKey)
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/api/workflows/:workflowKey', requireApiKey, (req, res) => {
+  try {
+    const workflowKey = req.params.workflowKey;
+
+    if (!isSafeKey(workflowKey)) {
+      return res.status(400).json({
+        success: false,
+        error: 'workflowKey が不正です'
+      });
+    }
+
+    const filePath = path.join(workflowsDir, `${workflowKey}.json`);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: 'Workflowが見つかりません'
+      });
+    }
+
+    const workflow = safeReadJson(filePath);
+
+    res.json({
+      success: true,
+      workflow
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/workflows', requireApiKey, (req, res) => {
+  try {
+    const workflow = req.body;
+
+    const validationError = validateWorkflowJson(workflow);
+
+    if (validationError) {
+      return res.status(400).json({
+        success: false,
+        error: validationError
+      });
+    }
+
+    const filePath = path.join(workflowsDir, `${workflow.workflowKey}.json`);
+
+    writeJson(filePath, workflow);
+
+    res.json({
+      success: true,
+      workflowKey: workflow.workflowKey,
+      fileName: `${workflow.workflowKey}.json`,
+      message: 'Workflowを保存しました'
     });
   } catch (error) {
     res.status(500).json({
