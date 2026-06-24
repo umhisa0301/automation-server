@@ -555,3 +555,1125 @@ _**Agent (default)**_
 <summary>Tool use: **read_file_v2**</summary>
 
 </details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search">
+<details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "path": "c:\\dev\\app_project\\automation-server\\src",
+  "pattern": "validateWorkflowJson|requireApiKey"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "c:\\dev\\app_project\\automation-server\\src",
+  "pattern": "validateWorkflowJson|requireApiKey",
+  "topFiles": [
+    {
+      "matchCount": 13,
+      "uri": "src\\server.js"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 13
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search">
+<details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **1** result in **1** directory</summary>
+
+Directory: **C:/dev/app_project/automation_admin_app** (1 file)
+
+| File |
+|------|
+| `../../../../.\lib\main.dart` |
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\src\server.js</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\src\server.js</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<think><details><summary>Thought Process</summary>
+main.dart が約 644 行の単一ファイルであることを把握した。既存構成を確認し、影響範囲を把握した上で実装を進める。
+
+追加機能を整理した。JSON読み込み・保存・エディタ表示・エラーハンドリング・左ペインボタンを実装する。main.dart を分割するか検討中。既存動作を壊さないことを最優先とする。
+
+main.dart に直接実装する方針を決めた。既存動作を壊さないため、まず既存コードを壊さずに済む範囲で進める。JSONエディタ用の TextEditingController と workflowJsonController を追加し、selectedWorkflowKey の有無を確認してから GET /api/workflows/$selectedWorkflowKey を呼び出す loadWorkflowJson() メソッドを設計している。
+
+JSON読み込み後の整形表示と、401・404などのエラー時に分かりやすいメッセージを出す仕組みを設計した。JSON保存メソッドではコントローラーからJSONをパースし、workflowKeyとsiteKeyをクライアント側で検証してPOSTする。成功時はログ出力、ワークフロー一覧再読み込み、選択状態の維持を行う。左ペインにはWorkflowドロップダウン直下に「Workflow JSON読込」と「Workflow JSON保存」ボタンを配置する。右ペインはスクリーンショット上部にJSONエディタを追加するレイアウトに変更する。既存の Expanded(3) / Divider / Expanded(2) の構成を維持しつつ、エディタ領域を追加する。
+
+右ペインの具体的なレイアウトを確定させた。スクリーンショットを flex:3、ログ・outputs 行を flex:2、JSONエディタを flex:2 で配置する。既存のスクショ表示やログ表示を壊さないよう、既存の Expanded 比例を維持しつつ下部に追加する。APIキー不正時のエラー処理も設計した。サーバーから返却される 401 を解析し、「APIキーが不正です」と表示する仕組みを想定している。</details></think>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search">
+<details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **1** result in **1** directory</summary>
+
+Directory: **C:/dev/app_project/automation_admin_app** (1 file)
+
+| File |
+|------|
+| `../../../../.\test\widget_test.dart` |
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write">
+<details>
+<summary>Tool use: **todo_write**</summary>
+
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "loadWorkflowJson / saveWorkflowJson API メソッド追加",
+      "id": "1",
+      "status": "in_progress"
+    },
+    {
+      "content": "左ペインに読込・保存ボタン、下部にJSON編集エリア追加",
+      "id": "2",
+      "status": "pending"
+    },
+    {
+      "content": "flutter analyze で静的解析確認",
+      "id": "3",
+      "status": "pending"
+    }
+  ],
+  "success": true
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: C:/dev/app_project/automation_admin_app/test/widget_test.dart</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<think><details><summary>Thought Process</summary>
+既存のウィジェットテストがMyAppを参照しており、現在存在しないクラスを指している。このテストは更新が必要だ。</details></think>
+
+_**Agent (default)**_
+
+構成を把握したので、`main.dart` に Workflow JSON の読込・編集・保存を追加します。
+
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+
+</tool-use>
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+
+</tool-use>
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+
+</tool-use>
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+
+</tool-use>
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+
+</tool-use>
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: cd C:/dev/app_project/automation_admin_app && flutter analyze lib/main.dart</summary>
+
+```bash
+cd C:/dev/app_project/automation_admin_app && flutter analyze lib/main.dart
+```
+
+```
+Analyzing main.dart...                                          
+
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\main.dart:545:7 - deprecated_member_use
+
+1 issue found. (ran in 3.4s)
+
+```
+</details>
+</tool-use>
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="read_lints">
+<details>
+<summary>Tool use: **read_lints**</summary>
+
+
+Parameters:
+
+```json
+{
+  "paths": [
+    "C:/dev/app_project/automation_admin_app/lib/main.dart"
+  ]
+}
+```
+Result:
+
+```json
+{
+  "linterErrorsByFile": [
+    {
+      "relativeWorkspacePath": "C:/dev/app_project/automation_admin_app/lib/main.dart"
+    }
+  ]
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="read_lints"><details>
+<summary>Tool use: **read_lints**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: cd C:/dev/app_project/automation_admin_app && flutter build windows --debug 2>&1 | Select-Object -Last 15</summary>
+
+```bash
+cd C:/dev/app_project/automation_admin_app && flutter build windows --debug 2>&1 | Select-Object -Last 15
+```
+
+```
+Building Windows application...                                    28.1s
+∁EBuilt build\windows\x64\runner\Debug\automation_admin_app.exe
+
+```
+</details>
+</tool-use>
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write">
+<details>
+<summary>Tool use: **todo_write**</summary>
+
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "loadWorkflowJson / saveWorkflowJson API メソッド追加",
+      "id": "1",
+      "status": "completed"
+    },
+    {
+      "content": "左ペインに読込・保存ボタン、下部にJSON編集エリア追加",
+      "id": "2",
+      "status": "completed"
+    },
+    {
+      "content": "flutter analyze で静的解析確認",
+      "id": "3",
+      "status": "in_progress"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "loadWorkflowJson / saveWorkflowJson API メソッド追加",
+      "id": "1",
+      "status": "in_progress"
+    },
+    {
+      "content": "左ペインに読込・保存ボタン、下部にJSON編集エリア追加",
+      "id": "2",
+      "status": "pending"
+    },
+    {
+      "content": "flutter analyze で静的解析確認",
+      "id": "3",
+      "status": "pending"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: curl -s -o NUL -w "%{http_code}" http://localhost:3001/health 2>&1</summary>
+
+```bash
+curl -s -o NUL -w "%{http_code}" http://localhost:3001/health 2>&1
+```
+
+```
+200
+```
+</details>
+</tool-use>
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+rg: : IO error for operation on : 指定されたパスが見つかりません。 (os error 3)
+
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+rg: : IO error for operation on : 指定されたパスが見つかりません。 (os error 3)
+
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search">
+<details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **9** results in **1** directory</summary>
+
+Directory: **C:/dev/app_project/automation-server** (9 files)
+
+| File |
+|------|
+| `../../../../.\configs\workflows\sample_saved_from_api.json` |
+| `../../../../.\configs\workflows\sample_user_value.json` |
+| `../../../../.\configs\workflows\sample_extract_multiple.json` |
+| `../../../../.\configs\workflows\sample_click_link.json` |
+| `../../../../.\configs\workflows\sample_extract_attribute.json` |
+| `../../../../.\configs\workflows\sample_extract_title.json` |
+| `../../../../.\configs\workflows\sample_bing_search.json` |
+| `../../../../.\configs\workflows\sample_example_open.json` |
+| `../../../../.\configs\workflows\sample_google_search.json` |
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search">
+<details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **1** result in **1** directory</summary>
+
+Directory: **C:/dev/app_project/automation-server** (1 file)
+
+| File |
+|------|
+| `../../../../.\.env` |
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: C:/dev/app_project/automation-server/configs/workflows/sample_google_search.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search">
+<details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "glob": "*.{md,example,env.example}",
+  "path": "C:/dev/app_project/automation-server",
+  "pattern": "AUTOMATION_API_KEY|api.key|apiKey"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "C:/dev/app_project/automation-server",
+  "pattern": "AUTOMATION_API_KEY|api.key|apiKey",
+  "topFiles": [
+    {
+      "matchCount": 2,
+      "uri": ".\\.specstory\\history\\2026-06-07_15-54-14Z-workflow-json-functionality-addition.md"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 2
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: curl -s -H "x-api-key: invalid" http://localhost:3001/api/workflows/sample_google_search</summary>
+
+```bash
+curl -s -H "x-api-key: invalid" http://localhost:3001/api/workflows/sample_google_search
+```
+
+```
+{"success":false,"error":"APIキーが不正です"}
+```
+</details>
+</tool-use>
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: C:/dev/app_project/automation_admin_app/lib/main.dart</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write">
+<details>
+<summary>Tool use: **todo_write**</summary>
+
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "loadWorkflowJson / saveWorkflowJson API メソッド追加",
+      "id": "1",
+      "status": "completed"
+    },
+    {
+      "content": "左ペインに読込・保存ボタン、下部にJSON編集エリア追加",
+      "id": "2",
+      "status": "completed"
+    },
+    {
+      "content": "flutter analyze で静的解析確認",
+      "id": "3",
+      "status": "completed"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "loadWorkflowJson / saveWorkflowJson API メソッド追加",
+      "id": "1",
+      "status": "completed"
+    },
+    {
+      "content": "左ペインに読込・保存ボタン、下部にJSON編集エリア追加",
+      "id": "2",
+      "status": "completed"
+    },
+    {
+      "content": "flutter analyze で静的解析確認",
+      "id": "3",
+      "status": "in_progress"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: C:/dev/app_project/automation-server/configs/workflows/sample_bing_search.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: C:/dev/app_project/automation-server/configs/workflows/sample_saved_from_api.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+## 完了報告
+
+Workflow JSON の表示・編集・保存機能を `automation_admin_app` に追加しました。
+
+---
+
+### 変更ファイル一覧
+
+| ファイル | 変更内容 |
+|---------|---------|
+| `lib/main.dart` | Workflow JSON 読込・保存 API、編集 UI、エラー処理を追加 |
+
+`pubspec.yaml` や他ファイルへの変更はありません（既存の `http` パッケージをそのまま利用）。
+
+---
+
+### 実装内容
+
+**1. Workflow JSON 読込 (`loadWorkflowJson`)**
+- `GET /api/workflows/{workflowKey}` を `x-api-key` 付きで呼び出し
+- レスポンスの `workflow` をインデント付き JSON で下部エディタに表示
+- 未選択時は保存前に `workflowKeyが未設定` をログ出力
+
+**2. Workflow JSON 保存 (`saveWorkflowJson`)**
+- 編集欄の JSON を `jsonDecode` でパース（構文エラー時は保存しない）
+- クライアント側で `workflowKey` / `siteKey` の存在チェック
+- `POST /api/workflows` に `Content-Type: application/json` + `x-api-key` で送信
+- 成功時: 「Workflowを保存しました」→ 一覧再取得 → 選択中 Workflow を維持
+
+**3. UI 配置**
+- **左ペイン**: Workflow ドロップダウン直下に「Workflow JSON読込」「Workflow JSON保存」ボタン
+- **右ペイン下部**: スクショ（flex:3）→ ログ/outputs（flex:2）→ **Workflow JSON エディタ（flex:2）**
+- エディタは `expands: true` + `maxLines: null` の複数行 `TextField`（等幅フォント）
+- 左ペインは既存の `ListView` のまま（オーバーフロー回避）
+
+**4. エラー処理 (`extractApiErrorMessage`)**
+- APIキー不正 → 401 専用メッセージ
+- JSON構文エラー → `FormatException` をキャッチ
+- workflowKey / siteKey 未設定 → クライアント側でブロック
+- API保存失敗 → サーバー `error` フィールドをログ表示
+
+---
+
+### 既存機能への影響
+
+| 機能 | 影響 |
+|------|------|
+| 一覧取得 / サイト切替 | 変更なし |
+| Workflow 実行 | 変更なし |
+| スクショ表示・拡大ダイアログ | 変更なし |
+| ログ / outputs 表示 | 変更なし（レイアウト比率のみ調整） |
+| `buildSafeDropdown` 安定化 | 維持 |
+| クラス名・関数名 | 既存名はそのまま、新規メソッドのみ追加 |
+
+`main.dart` は約 830 行になりましたが、既存 State クラス内への追加にとどめ、ファイル分割は行っていません（既存動作を優先）。
+
+---
+
+### 動作確認結果
+
+| 確認項目 | 結果 |
+|---------|------|
+| `flutter analyze lib/main.dart` | 通過（既存の Dropdown `value` deprecation info のみ） |
+| `flutter build windows --debug` | 成功 |
+| API 401 レスポンス形式 | `{"success":false,"error":"APIキーが不正です"}` を確認（curl） |
+| 実機 UI 操作（一覧/実行/保存） | 未実施（API キーが必要なため手動確認を推奨） |
+
+**手動確認手順:**
+1. アプリ起動 → Base URL / API Key 入力 →「一覧取得」
+2. サイト・Workflow 選択 →「Workflow JSON読込」→ 下部エディタに JSON 表示
+3. JSON 編集 →「Workflow JSON保存」→ ログに「Workflowを保存しました」
+4. 「Workflow実行」で実行可能であることを確認
+5. スクショ表示・拡大ダイアログが従来どおり動作することを確認
+
+---
+
+### iOS 移植監査メモ
+
+| 項目 | 評価 | 備考 |
+|------|------|------|
+| `http` パッケージ | ✅ 問題なし | iOS でもそのまま利用可 |
+| `TextField` 複数行エディタ | ⚠️ 要確認 | ソフトキーボード表示時に下部ペインが隠れる可能性。`resizeToAvoidBottomInset` や `SingleChildScrollView` ラップを検討 |
+| 固定幅左ペイン (420px) | ⚠️ 要調整 | iPhone 縦画面では `Row` レイアウトが狭い。`LayoutBuilder` + 狭幅時は `Column` 切替が望ましい |
+| `Image.network` + API Key ヘッダ | ✅ 問題なし | iOS ATS は HTTPS 前提（localhost 除く） |
+| Windows 固有コード | ✅ なし | プラットフォーム分岐なし |
+| キーボードショートカット | — 未実装 | Windows 管理画面向け。iOS では不要 |
+
+今回は Windows 管理画面としての実用性を優先し、レスポンシブ対応は最小限（`ListView` / `Expanded` / `SingleChildScrollView`）に留めています。
+
+---
+
+### テスト観点（チェックリスト）
+
+- [ ] 一覧取得できる
+- [ ] サイト切替できる
+- [ ] Workflow 実行できる
+- [ ] Workflow JSON 読込できる
+- [ ] JSON を保存できる
+- [ ] 保存後も Workflow 実行できる
+- [ ] スクショ表示・拡大表示が壊れていない
+- [ ] 壊れた JSON 保存時にエラーログが出る
+- [ ] API キー不正時にエラーログが出る
+- [ ] `siteKey` 未設定の Workflow 保存時にエラーログが出る
+
+---
+
+**補足:** 既存の Workflow JSON に `siteKey` が含まれていない場合（例: `sample_google_search.json`）、保存前に JSON 内へ `siteKey` を追加する必要があります。サーバー側バリデーションと一致する仕様です。
+
+---
+
+_**User**_
+
+目的：
+automation-server に楽天ROOM向けの site / user / workflow 定義を追加し、既存の自動化基盤を壊さずに「楽天ROOM用Workflowを管理画面から選択・編集・実行できる状態」にしてください。
+
+重要：
+- 既存の Bing / sample_user / 既存Workflow / API / Flutter管理画面は壊さないでください。
+- 既存の workflow_runner.js / server.js の関数名・API仕様は不要に変更しないでください。
+- まずは楽天ROOMの実ログインや自動投稿までは行わないでください。
+- 今回は「楽天ROOMサイト追加」と「到達確認Workflow」までを目的にしてください。
+- ログインID・パスワードなど本物の認証情報は絶対にGit管理しないでください。
+- configs/users/*.json は .gitignore 対象になっているか確認してください。
+- サンプルユーザーにはダミー値だけを入れてください。
+
+現在の構成：
+- Node.js + Express + Playwright
+- VPS上でPM2常駐
+- APIキー認証あり
+- Flutter管理画面あり
+- サイト選択 → ユーザー選択 → Workflow選択 → JSON読込/編集/保存 → 実行 まで完了済み
+- 既存 siteKey: bing
+
+追加したい内容：
+
+1. 楽天ROOM site定義を追加
+新規ファイル：
+configs/sites/rakuten_room.json
+
+内容例：
+{
+  "siteKey": "rakuten_room",
+  "displayName": "楽天ROOM",
+  "baseUrl": "https://room.rakuten.co.jp",
+  "description": "楽天ROOM向けの自動操作・情報取得サイト定義"
+}
+
+2. 楽天ROOM用サンプルユーザーを追加
+新規ファイル：
+configs/users/rakuten_room_sample_user.json
+
+内容例：
+{
+  "userKey": "rakuten_room_sample_user",
+  "siteKey": "rakuten_room",
+  "displayName": "楽天ROOMサンプルユーザー",
+  "loginId": "dummy@example.com",
+  "password": "dummy_password",
+  "values": {
+    "roomProfileUrl": "https://room.rakuten.co.jp/sample",
+    "searchKeyword": "育児",
+    "commentText": "サンプルコメント"
+  }
+}
+
+注意：
+- 本物のID・パスワードは入れないでください。
+- このファイルがGitHubへpushされない設定になっているか確認してください。
+- もし .gitignore 上、configs/users/sample_user.json だけ例外許可されているなら、この楽天ROOM用ユーザーはGit管理対象外で問題ありません。
+- 必要なら configs/users/rakuten_room_sample_user.example.json のようなテンプレートだけGit管理する提案をしてください。
+
+3. 楽天ROOM到達確認Workflowを追加
+新規ファイル：
+configs/workflows/rakuten_room_open_home.json
+
+内容例：
+{
+  "workflowKey": "rakuten_room_open_home",
+  "siteKey": "rakuten_room",
+  "name": "楽天ROOMホーム到達確認",
+  "startUrl": "https://room.rakuten.co.jp",
+  "steps": [
+    {
+      "name": "3秒待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "ページタイトル取得",
+      "type": "extractText",
+      "selectorType": "css",
+      "selector": "title",
+      "saveAs": "pageTitle"
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "rakuten_room_open_home.png"
+    }
+  ]
+}
+
+ただし注意：
+- Playwrightの locator.allTextContents() で title 要素が取得しづらい場合は、既存runnerに影響しない範囲で extractTitle ステップ追加を提案してください。
+- まずは既存の extractText / screenshot で動く形を優先してください。
+- selector が不安な場合は body など安定するセレクタに変更して構いません。
+
+4. 楽天ROOMプロフィールURL到達確認Workflowを追加
+新規ファイル：
+configs/workflows/rakuten_room_open_profile.json
+
+目的：
+user.values.roomProfileUrl を使ってユーザー別のROOMプロフィールURLへアクセスできることを確認する。
+
+希望仕様：
+{
+  "workflowKey": "rakuten_room_open_profile",
+  "siteKey": "rakuten_room",
+  "name": "楽天ROOMプロフィール到達確認",
+  "startUrlFrom": "user.values.roomProfileUrl",
+  "steps": [
+    {
+      "name": "3秒待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "rakuten_room_open_profile.png"
+    }
+  ]
+}
+
+重要：
+- 現在の workflow_runner.js が startUrlFrom に未対応なら、後方互換を壊さず追加してください。
+- startUrl がある場合は従来どおり startUrl を優先または使用。
+- startUrlFrom がある場合は resolveValue と同様に user.values.roomProfileUrl を解決して page.goto してください。
+- startUrl / startUrlFrom のどちらも無い場合は分かりやすいエラーを返してください。
+- 既存Workflowは必ず今まで通り動くようにしてください。
+
+5. 管理画面での確認観点
+Flutter管理画面は既存機能のままで、以下ができることを確認してください。
+- 一覧取得
+- サイトDropdownに「楽天ROOM」が表示される
+- 楽天ROOMを選ぶと、楽天ROOM用ユーザーだけ表示される
+- 楽天ROOM用Workflowだけ表示される
+- rakuten_room_open_home を実行できる
+- スクショが表示される
+- rakuten_room_open_profile を実行できる
+- Workflow JSON読込/保存が従来通り動く
+
+6. セキュリティ・Git管理
+以下を確認してください。
+- configs/users/*.json が原則Git管理外であること
+- 本物の認証情報がコミットされないこと
+- exampleファイルを作る場合は、ダミー値だけにすること
+- .env はGit管理外であること
+
+7. 変更後に実行する確認
+ローカルで：
+npm run sample が壊れていないこと
+npm run start が起動すること
+GET /api/sites で bing と rakuten_room が返ること
+GET /api/users?siteKey=rakuten_room が返ること
+GET /api/workflows?siteKey=rakuten_room が返ること
+
+VPS反映後：
+git pull
+pm2 restart automation-server --update-env
+curl http://localhost:3001/api/sites -H "x-api-key: <キー>"
+curl "http://localhost:3001/api/workflows?siteKey=rakuten_room" -H "x-api-key: <キー>"
+
+完了報告に含めてほしいもの：
+- 変更ファイル一覧
+- 追加したsite/user/workflowの内容
+- workflow_runner.js を変更した場合は変更点
+- 既存機能への影響
+- 動作確認結果
+- Git管理・認証情報漏洩防止の確認結果
+- 次に進める場合の提案
+
+---
+
+_**Agent (default)**_
+
+<think><details><summary>Thought Process</summary>
+automation-server に楽天ROOM向けの site / user / workflow 定義を追加する。workflow_runner.js に startUrlFrom が未対応なら対応する。既存の Bing / sample_user / API / Flutter 管理画面は壊さない。</details></think>
+
+_**Agent (default)**_
+
+既存構成と `workflow_runner.js` の `startUrl` 処理を確認してから、楽天ROOM向けの定義を追加します。
+
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\src\workflow_runner.js</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\.gitignore</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search">
+<details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **11** results in **1** directory</summary>
+
+Directory: **c:\dev\app_project\automation-server** (11 files)
+
+| File |
+|------|
+| `../.\configs\workflows\sample_saved_from_api.json` |
+| `../.\configs\workflows\sample_user_value.json` |
+| `../.\configs\users\sample_user.json` |
+| `../.\configs\sites\bing.json` |
+| `../.\configs\workflows\sample_extract_multiple.json` |
+| `../.\configs\workflows\sample_click_link.json` |
+| `../.\configs\workflows\sample_extract_attribute.json` |
+| `../.\configs\workflows\sample_extract_title.json` |
+| `../.\configs\workflows\sample_bing_search.json` |
+| `../.\configs\workflows\sample_example_open.json` |
+| `../.\configs\workflows\sample_google_search.json` |
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\package.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<think><details><summary>Thought Process</summary>
+まず既存の bing.json と sample_user の定義を確認する。</details></think>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\configs\sites\bing.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\configs\users\sample_user.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\src\run_sample.js</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: c:\dev\app_project\automation-server\configs\workflows\sample_extract_title.json</summary>
+
+</details>
+</tool-use>
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2**</summary>
+
+</details></tool-use>
+
+_**Agent (default)**_
+
+<think><details><summary>Thought Process</summary>
+workflow_runner.js に resolveStartUrl 関数を追加する方針を立てている。</details></think>
