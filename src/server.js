@@ -57,7 +57,7 @@ function listJsonFiles(dirPath) {
 
   return fs
     .readdirSync(dirPath)
-    .filter((fileName) => fileName.endsWith('.json'))
+    .filter((fileName) => fileName.endsWith('.json') && !fileName.endsWith('.example.json'))
     .map((fileName) => {
       const filePath = path.join(dirPath, fileName);
       const stat = fs.statSync(filePath);

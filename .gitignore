@@ -8,5 +8,6 @@ storage/results/
 
 configs/users/*.json
 !configs/users/sample_user.json
+!configs/users/*.example.json
 
 *.log

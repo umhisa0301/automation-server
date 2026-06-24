@@ -1,0 +1,18 @@
+{
+  "workflowKey": "rakuten_room_open_profile",
+  "siteKey": "rakuten_room",
+  "name": "楽天ROOMプロフィール到達確認",
+  "startUrlFrom": "user.values.roomProfileUrl",
+  "steps": [
+    {
+      "name": "3秒待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "rakuten_room_open_profile.png"
+    }
+  ]
+}

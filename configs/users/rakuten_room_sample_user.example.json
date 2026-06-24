@@ -1,0 +1,12 @@
+{
+  "userKey": "rakuten_room_sample_user",
+  "siteKey": "rakuten_room",
+  "displayName": "楽天ROOMサンプルユーザー",
+  "loginId": "dummy@example.com",
+  "password": "dummy_password",
+  "values": {
+    "roomProfileUrl": "https://room.rakuten.co.jp/sample",
+    "searchKeyword": "育児",
+    "commentText": "サンプルコメント"
+  }
+}

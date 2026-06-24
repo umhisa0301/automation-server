@@ -23,6 +23,24 @@ function resolveValue(valueFrom, context) {
   return current;
 }
 
+function resolveStartUrl(workflow, runContext) {
+  if (workflow.startUrl) {
+    return workflow.startUrl;
+  }
+
+  if (workflow.startUrlFrom) {
+    const url = resolveValue(workflow.startUrlFrom, runContext);
+
+    if (url == null || String(url).trim() === '') {
+      throw new Error(`startUrlFrom の値が空です: ${workflow.startUrlFrom}`);
+    }
+
+    return String(url).trim();
+  }
+
+  throw new Error('Workflowに startUrl または startUrlFrom が必要です');
+}
+
 function getLocator(page, step) {
   if (step.selectorType === 'xpath') {
     return page.locator(`xpath=${step.selector}`);
@@ -77,10 +95,13 @@ async function runWorkflow({
   try {
 
     logs.push(`開始: ${workflow.name}`);
-    logs.push(`URLを開きます: ${workflow.startUrl}`);
+
+    const startUrl = resolveStartUrl(workflow, runContext);
+
+    logs.push(`URLを開きます: ${startUrl}`);
 
     await page.goto(
-      workflow.startUrl,
+      startUrl,
       {
         waitUntil: 'domcontentloaded'
       }

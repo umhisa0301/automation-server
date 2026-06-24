@@ -1,0 +1,25 @@
+{
+  "workflowKey": "rakuten_room_open_home",
+  "siteKey": "rakuten_room",
+  "name": "楽天ROOMホーム到達確認",
+  "startUrl": "https://room.rakuten.co.jp",
+  "steps": [
+    {
+      "name": "3秒待機",
+      "type": "wait",
+      "milliseconds": 3000
+    },
+    {
+      "name": "ページタイトル取得",
+      "type": "extractText",
+      "selectorType": "css",
+      "selector": "title",
+      "saveAs": "pageTitle"
+    },
+    {
+      "name": "スクショ",
+      "type": "screenshot",
+      "fileName": "rakuten_room_open_home.png"
+    }
+  ]
+}

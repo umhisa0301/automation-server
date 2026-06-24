@@ -1,0 +1,6 @@
+{
+  "siteKey": "rakuten_room",
+  "displayName": "楽天ROOM",
+  "baseUrl": "https://room.rakuten.co.jp",
+  "description": "楽天ROOM向けの自動操作・情報取得サイト定義"
+}
